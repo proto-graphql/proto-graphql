@@ -4,6 +4,8 @@ package graphql;
 
 import "google/protobuf/descriptor.proto";
 
+option go_package = "github.com/proto-graphql/proto-graphql/go/graphqlpb";
+
 message GraphqlSchemaOptions {
   string type_prefix = 1;
   bool ignore_requests = 2;
