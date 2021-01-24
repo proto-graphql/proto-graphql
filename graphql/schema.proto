@@ -10,6 +10,7 @@ message GraphqlSchemaOptions {
   string type_prefix = 1;
   bool ignore_requests = 2;
   bool ignore_responses = 3;
+  bool ignore = 4;
 }
 
 extend google.protobuf.FileOptions {
