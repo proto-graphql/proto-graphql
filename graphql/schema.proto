@@ -61,6 +61,8 @@ message GraphqlFieldOptions {
   // }
   // ```
   string name = 2;
+  // Omit resolver implementation in code generation.
+  bool skip_resolver = 3;
 }
 
 extend google.protobuf.FieldOptions {
