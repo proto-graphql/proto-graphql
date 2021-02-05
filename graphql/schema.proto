@@ -38,6 +38,21 @@ message GraphqlObjectTypeOptions {
   bool squash_union = 2;
   // If `interface` is true, the message is converted to `interface` instead of object type.
   bool interface = 3;
+  // Specify a object name in GraphQL. If do not specified, use the same as a Protobuf message field name.
+  //
+  // ```proto
+  // message Foo {
+  //   option (graphql.object_type).name = "Bar"
+  //   // ...
+  // }
+  // ````
+  //
+  // ```grahpql
+  // object Bar {
+  //   # ...
+  // }
+  // ```
+  string name = 4;
 }
 
 extend google.protobuf.MessageOptions {
