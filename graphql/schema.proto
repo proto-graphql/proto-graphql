@@ -55,8 +55,14 @@ message GraphqlObjectTypeOptions {
   string name = 4;
 }
 
+message GraphqlInputTypeOptions {
+  // Do not always generate partial input types.
+  bool no_partial = 1;
+}
+
 extend google.protobuf.MessageOptions {
   GraphqlObjectTypeOptions object_type = 2056;
+  GraphqlInputTypeOptions input_type = 2057;
 }
 
 message GraphqlFieldOptions {
