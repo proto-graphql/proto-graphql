@@ -65,6 +65,12 @@ extend google.protobuf.MessageOptions {
   GraphqlInputTypeOptions input_type = 2057;
 }
 
+enum Nullability {
+  NULLABILITY_UNSPECIFIED = 0;
+  NULLABLE = 1;
+  NON_NULL = 2;
+}
+
 message GraphqlFieldOptions {
   bool ignore = 1;
   // Specify a field name in GraphQL. If do not specified, use the same as a Protobuf message field name.
@@ -84,6 +90,13 @@ message GraphqlFieldOptions {
   string name = 2;
   // Omit resolver implementation in code generation.
   bool skip_resolver = 3;
+
+  // Indicates the nullability of the output for a given field.
+  Nullability output_nullability = 11;
+  // Indicates the nullability of the input for a given field.
+  Nullability input_nullability = 12;
+  // Indicates the nullability of the partial input for a given field.
+  Nullability partial_input_nullability = 13;
 }
 
 extend google.protobuf.FieldOptions {
