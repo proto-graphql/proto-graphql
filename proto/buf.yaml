@@ -1,0 +1,11 @@
+version: v1
+name: buf.build/proto-graphql/proto-graphql
+breaking:
+  use:
+    - FILE
+lint:
+  use:
+    - DEFAULT
+  except:
+    - ENUM_VALUE_PREFIX
+    - PACKAGE_VERSION_SUFFIX
