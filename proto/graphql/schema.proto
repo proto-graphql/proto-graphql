@@ -90,6 +90,21 @@ message GraphqlFieldOptions {
   string name = 2;
   // Omit resolver implementation in code generation.
   bool skip_resolver = 3;
+  // Use ID type.
+  //
+  // ```proto
+  // message User {
+  //   // Required. Output only.
+  //   uint64 id = 1 [(graphql.field).id = true];
+  // }
+  // ````
+  //
+  // ```grahpql
+  // object User {
+  //   id: ID!
+  // }
+  // ```
+  bool id = 4;
 
   // Indicates the nullability of the output for a given field.
   Nullability output_nullability = 11;
