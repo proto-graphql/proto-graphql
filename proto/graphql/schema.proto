@@ -58,6 +58,8 @@ message GraphqlObjectTypeOptions {
 message GraphqlInputTypeOptions {
   // Do not always generate partial input types.
   bool no_partial = 1;
+  // Do not generate GraphQL Input. Nested types will not be ignored.
+  bool ignore = 2;
 }
 
 extend google.protobuf.MessageOptions {
