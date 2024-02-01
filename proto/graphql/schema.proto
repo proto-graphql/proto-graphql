@@ -130,6 +130,21 @@ extend google.protobuf.OneofOptions {
 
 message GraphqlEnumOptions {
   bool ignore = 1;
+  // Specify an enum name in GraphQL. If do not specified, use the same as a Protobuf message field name.
+  //
+  // ```proto
+  // enum Foo {
+  //   option (graphql.enum_type).name = "Bar"
+  //   // ...
+  // }
+  // ````
+  //
+  // ```grahpql
+  // enum Bar {
+  //   # ...
+  // }
+  // ```
+  string name = 4;
 }
 
 extend google.protobuf.EnumOptions {
