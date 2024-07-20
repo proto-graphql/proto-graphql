@@ -22,6 +22,7 @@ jobs:
     name: ${{ matrix.job }}
     steps:
       - uses: actions/checkout@v4
+      # https://aquaproj.github.io/docs/products/aqua-installer/#-caching
       - uses: actions/cache@v4
         with:
           path: ~/.local/share/aquaproj-aqua
@@ -29,6 +30,8 @@ jobs:
           restore-keys: |
             v1-aqua-installer-${{runner.os}}-${{runner.arch}}-
       - uses: aquaproj/aqua-installer@v3.0.1
+        with:
+          aqua-version: "v2.30.0"
       - uses: bufbuild/buf-lint-action@v1
         if: ${{ matrix.job == 'lint' }}
       - run: |
