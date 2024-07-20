@@ -1,5 +1,5 @@
 version: v2
 plugins:
   - remote: buf.build/protocolbuffers/go:v1.32.0
-    out: ../go
+    out: ./go
     opt: module=github.com/proto-graphql/proto-graphql/go

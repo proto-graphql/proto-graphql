@@ -2,4 +2,4 @@
 
 .PHONY: build
 build:
-	@cd ./proto && buf generate
+	buf generate
