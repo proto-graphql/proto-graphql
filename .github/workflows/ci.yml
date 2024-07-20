@@ -44,5 +44,5 @@ jobs:
         if: ${{ matrix.job == 'generate' }}
       - uses: bufbuild/buf-breaking-action@v1
         with:
-          against: "https://github.com/proto-graphql-js/proto-graphql#branch=main"
+          against: "https://github.com/${{ github.repository }}.git#branch=${{ github.base_ref }}"
         if: ${{ matrix.job == 'breaking-change' && github.event.pull_request }}
