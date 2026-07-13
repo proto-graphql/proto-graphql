@@ -158,3 +158,37 @@ message GraphqlEnumValueOptions {
 extend google.protobuf.EnumValueOptions {
   GraphqlEnumValueOptions enum_value = 2056;
 }
+
+// EXPERIMENTAL: this option is under active development and may change without notice.
+message GraphqlRpcOptions {
+  // Field numbers 1-4 are planned for service->operation support
+  // (ignore/operation/name/expose_field) and 10 for federation support;
+  // they are intentionally not defined yet and land with their consumers.
+  GraphqlRpcBatchOptions batch = 5;
+}
+
+// EXPERIMENTAL: this option is under active development and may change without notice.
+// Consumed by protoc-gen-dataloader; see
+// docs/design/protoc-gen-dataloader/design.md for details.
+message GraphqlRpcBatchOptions {
+  // The repeated key-list field on the request. May be omitted if the
+  // request has exactly one repeated field (auto-inferred).
+  string key_field = 1;
+  // The repeated entity-list field on the response. May be omitted if the
+  // response has exactly one repeated message field (auto-inferred).
+  string entity_field = 2;
+  // The key field on the entity, used for key matching. Required in both
+  // entity and group mode for now. Planned: entity mode will fall back to
+  // the entity's `(graphql.object_type).federation.key` when this is
+  // omitted, once federation support lands.
+  string entity_key = 3;
+  // Generates a group loader: one key maps to N entities.
+  bool group = 4;
+  // The maximum number of keys to send in a single RPC call (DataLoader's
+  // `maxBatchSize`). 0 means unlimited.
+  uint32 max_batch_size = 5;
+}
+
+extend google.protobuf.MethodOptions {
+  GraphqlRpcOptions rpc = 2056;
+}
