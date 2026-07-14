@@ -11,6 +11,21 @@ message GraphqlSchemaOptions {
   bool ignore_requests = 2;
   bool ignore_responses = 3;
   bool ignore = 4;
+
+  // EXPERIMENTAL: this option is under active development and may change without notice.
+  // Renames `XxxRequest` messages to `XxxInput` and generates only the Input
+  // type for them (suffix-transform variant of `ignore_requests`). If both
+  // `ignore_requests` and `requests_as_inputs` are set for the same
+  // message, `ignore_requests` wins and the codegen tool should warn about
+  // the combination.
+  bool requests_as_inputs = 5;
+  // EXPERIMENTAL: this option is under active development and may change without notice.
+  // Renames `XxxResponse` messages to `XxxPayload` and generates only the
+  // Object type for them (suffix-transform variant of `ignore_responses`).
+  // If both `ignore_responses` and `responses_as_payloads` are set for the
+  // same message, `ignore_responses` wins and the codegen tool should warn
+  // about the combination.
+  bool responses_as_payloads = 6;
 }
 
 extend google.protobuf.FileOptions {
@@ -160,11 +175,48 @@ extend google.protobuf.EnumValueOptions {
 }
 
 // EXPERIMENTAL: this option is under active development and may change without notice.
+// Presence of this option on a service (regardless of `ignore`) opts its
+// unary RPCs into Query/Mutation generation; services without this option
+// are skipped entirely. Set `ignore` to keep the service opted in while
+// temporarily halting generation.
+message GraphqlServiceOptions {
+  // Do not generate Query/Mutation fields for this service's RPCs. The
+  // option itself is kept so generation can be re-enabled later.
+  bool ignore = 1;
+}
+
+// EXPERIMENTAL: this option is under active development and may change without notice.
+enum GraphqlOperation {
+  // Convention default: derived from `idempotency_level`
+  // (`NO_SIDE_EFFECTS` becomes QUERY, anything else becomes MUTATION).
+  GRAPHQL_OPERATION_UNSPECIFIED = 0;
+  QUERY = 1;
+  MUTATION = 2;
+}
+
+// EXPERIMENTAL: this option is under active development and may change without notice.
+// Presence of `(graphql.service)` on a service (see `GraphqlServiceOptions`)
+// opts its unary RPCs into Query/Mutation generation; this message then
+// controls how each individual RPC is generated.
 message GraphqlRpcOptions {
-  // Field numbers 1-4 are planned for service->operation support
-  // (ignore/operation/name/expose_field) and 10 for federation support;
-  // they are intentionally not defined yet and land with their consumers.
+  // Do not generate a Query/Mutation field for this RPC.
+  bool ignore = 1;
+  // Overrides the operation type inferred from `idempotency_level`. See
+  // `GraphqlOperation` for the default rule when unspecified.
+  GraphqlOperation operation = 2;
+  // Overrides the field name. Defaults to the camelCase of the RPC name.
+  string name = 3;
+  // Unwraps the specified field of the response and uses it as the return
+  // value.
+  string expose_field = 4;
+
+  // Declares this RPC as a batch loader generation target, independent of
+  // federation. Consumed by protoc-gen-dataloader; see
+  // docs/design/protoc-gen-dataloader/design.md for details.
   GraphqlRpcBatchOptions batch = 5;
+
+  // Field number 10 is reserved for federation support (Step 2) and
+  // intentionally not defined yet; it lands with its consumer.
 }
 
 // EXPERIMENTAL: this option is under active development and may change without notice.
@@ -187,6 +239,10 @@ message GraphqlRpcBatchOptions {
   // The maximum number of keys to send in a single RPC call (DataLoader's
   // `maxBatchSize`). 0 means unlimited.
   uint32 max_batch_size = 5;
+}
+
+extend google.protobuf.ServiceOptions {
+  GraphqlServiceOptions service = 2056;
 }
 
 extend google.protobuf.MethodOptions {
